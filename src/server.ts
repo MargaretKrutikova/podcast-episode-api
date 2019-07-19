@@ -30,6 +30,16 @@ type PodcastData = {
   data: EpisodeData[]
 }
 
+type Episode = {
+  id: string | null
+  websiteUrl: string | null
+}
+
+const toReturnEpisode = ({ id, attributes }: EpisodeData) => ({
+  id,
+  websiteUrl: attributes ? attributes.websiteUrl : ""
+})
+
 const getEpisodeApiUrl = (podcastId: string) =>
   `${process.env.API_URL}/v1/catalog/us/podcasts/${podcastId}/episodes?offset=0&limit=300`
 
@@ -47,12 +57,21 @@ const resolvers = {
         ep =>
           ep.attributes.name.toLowerCase() === episodeName.toLocaleLowerCase()
       )
-      return episode
+      const data: Episode = episode
+        ? toReturnEpisode(episode)
+        : { id: null, websiteUrl: null }
+
+      return data
     }
   }
 }
 
-const server = new ApolloServer({ typeDefs, resolvers })
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  introspection: true,
+  playground: true
+})
 
 const app = express()
 server.applyMiddleware({ app })
@@ -60,3 +79,5 @@ server.applyMiddleware({ app })
 app.listen({ port: 4000 }, () =>
   console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
 )
+
+module.exports = app

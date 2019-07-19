@@ -15,7 +15,8 @@
     "test": "run-s build test:*",
     "test:lint": "tslint --project . && prettier \"src/**/*.ts\" --list-different",
     "watch-node": "nodemon build/main/server.js",
-    "watch": "run-s build && run-p \"build -- -w\" \"watch-node\""
+    "watch": "run-s build && run-p \"build -- -w\" \"watch-node\"",
+    "deploy": "now"
   },
   "devDependencies": {
     "@types/dotenv": "^4.0.3",
