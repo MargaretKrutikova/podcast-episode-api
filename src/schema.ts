@@ -18,22 +18,53 @@ export const typeDefs = gql`
     podcastTitle: String!
     podcastListennotesUrl: String
   }
+  type PodcastSearchResult {
+    listennotesId: String!
+    listennotesUrl: String!
+    rss: String!
+    description: String!
+    title: String!
+    publisher: String!
+    image: String
+    thumbnail: String
+    podcastItunesId: Int!
+    latestPubDateMs: Int!
+    earliestPubDateMs: Int!
+    genreIds: [Int]!
+    totalEpisodes: Int!
+  }
   type EpisodeSearchResults {
     count: Int!
     nextOffset: Int!
     total: Int!
     results: [EpisodeSearchResult]!
   }
+  type PodcastSearchResults {
+    count: Int!
+    nextOffset: Int!
+    total: Int!
+    results: [PodcastSearchResult]!
+  }
   type ItunesEpisode {
     id: String
     websiteUrl: String
   }
-  input SearchInput {
-    term: String!
+  input BaseSearchInput {
+    language: String
     genreIds: [Int]
+    searchTerm: String!
+    offset: Int
+  }
+  input EpisodeSearchInput {
+    podcastId: String
+    excludePodcastId: String
   }
   type Query {
     itunesEpisode(podcastId: String!, episodeName: String!): ItunesEpisode
-    searchEpisodes(input: SearchInput!): EpisodeSearchResults
+    searchEpisodes(
+      input: BaseSearchInput!
+      episodeInput: EpisodeSearchInput
+    ): EpisodeSearchResults
+    searchPodcasts(input: BaseSearchInput!): PodcastSearchResults
   }
 `

@@ -1,4 +1,4 @@
-import { EpisodeSearchResult } from "./generated/graphql"
+import { EpisodeSearchResult, PodcastSearchResult } from "./generated/graphql"
 
 export type ListennotesPodcastSearchResult = {
   rss: string
@@ -17,8 +17,6 @@ export type ListennotesPodcastSearchResult = {
   genre_ids: number[]
   listennotes_url: string
   total_episodes: number
-  email: string
-  explicit_content: boolean
 }
 
 export type ListennotesEpisodeSearchResult = {
@@ -60,6 +58,24 @@ export const toEpisodeSearchResult = (
   genreIds: episode.genre_ids,
   podcastTitle: episode.title_original,
   podcastListennotesUrl: episode.podcast_listennotes_url
+})
+
+export const toPodcastSearchResult = (
+  podcast: ListennotesPodcastSearchResult
+): PodcastSearchResult => ({
+  listennotesId: podcast.id,
+  listennotesUrl: podcast.listennotes_url,
+  rss: podcast.rss,
+  description: truncateDescription(podcast.description_original),
+  title: podcast.title_original,
+  publisher: podcast.publisher_original,
+  image: podcast.image,
+  thumbnail: podcast.thumbnail,
+  podcastItunesId: podcast.itunes_id,
+  latestPubDateMs: podcast.latest_pub_date_ms,
+  earliestPubDateMs: podcast.earliest_pub_date_ms,
+  genreIds: podcast.genre_ids,
+  totalEpisodes: podcast.total_episodes
 })
 
 export type ListennotesSearchResult = {

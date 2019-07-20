@@ -1,9 +1,16 @@
 import express from "express"
 import { ApolloServer } from "apollo-server-express"
 import { typeDefs } from "./schema"
-import { SearchInput, Resolvers } from "./generated/graphql"
+import {
+  Resolvers,
+  QuerySearchEpisodesArgs,
+  QuerySearchPodcastsArgs
+} from "./generated/graphql"
 import { getItunesEpisode, ItunesEpisodeQuery } from "./itunesApi"
-import { getEpisodeSearchResults } from "./listenNotesApi"
+import {
+  getEpisodeSearchResults,
+  getPodcastSearchResults
+} from "./listenNotesApi"
 
 import "./env"
 
@@ -11,8 +18,10 @@ const resolvers: Resolvers = {
   Query: {
     itunesEpisode: (_: any, params: ItunesEpisodeQuery) =>
       getItunesEpisode(params),
-    searchEpisodes: (_: any, params: { input: SearchInput }) =>
-      getEpisodeSearchResults(params.input)
+    searchEpisodes: (_: any, params: QuerySearchEpisodesArgs) =>
+      getEpisodeSearchResults(params.input, params.episodeInput),
+    searchPodcasts: (_: any, params: QuerySearchPodcastsArgs) =>
+      getPodcastSearchResults(params.input)
   }
 }
 
