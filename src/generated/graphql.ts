@@ -70,6 +70,7 @@ export type QuerySearchEpisodesArgs = {
 
 export type SearchInput = {
   term: Scalars["String"];
+  genreIds?: Maybe<Array<Maybe<Scalars["Int"]>>>;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -147,8 +148,8 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars["String"]>;
   ItunesEpisode: ResolverTypeWrapper<ItunesEpisode>;
   SearchInput: SearchInput;
-  EpisodeSearchResults: ResolverTypeWrapper<EpisodeSearchResults>;
   Int: ResolverTypeWrapper<Scalars["Int"]>;
+  EpisodeSearchResults: ResolverTypeWrapper<EpisodeSearchResults>;
   EpisodeSearchResult: ResolverTypeWrapper<EpisodeSearchResult>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
   CacheControlScope: CacheControlScope;
@@ -161,8 +162,8 @@ export type ResolversParentTypes = {
   String: Scalars["String"];
   ItunesEpisode: ItunesEpisode;
   SearchInput: SearchInput;
-  EpisodeSearchResults: EpisodeSearchResults;
   Int: Scalars["Int"];
+  EpisodeSearchResults: EpisodeSearchResults;
   EpisodeSearchResult: EpisodeSearchResult;
   Boolean: Scalars["Boolean"];
   CacheControlScope: CacheControlScope;
