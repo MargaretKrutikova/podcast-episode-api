@@ -44,7 +44,7 @@ export type EpisodeSearchResult = {
   image: Scalars["String"];
   thumbnail: Scalars["String"];
   podcastItunesId: Scalars["Int"];
-  pubDateMs: Scalars["Int"];
+  pubDate: Scalars["String"];
   podcastListennotesId: Scalars["String"];
   genreIds: Array<Scalars["Int"]>;
   podcastTitle: Scalars["String"];
@@ -76,8 +76,8 @@ export type PodcastSearchResult = {
   image: Scalars["String"];
   thumbnail: Scalars["String"];
   podcastItunesId: Scalars["Int"];
-  latestPubDateMs: Scalars["Int"];
-  earliestPubDateMs: Scalars["Int"];
+  latestPubDate: Scalars["String"];
+  earliestPubDate: Scalars["String"];
   genreIds: Array<Scalars["Int"]>;
   totalEpisodes: Scalars["Int"];
 };
@@ -238,7 +238,7 @@ export type EpisodeSearchResultResolvers<
   image?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   thumbnail?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   podcastItunesId?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  pubDateMs?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  pubDate?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   podcastListennotesId?: Resolver<
     ResolversTypes["String"],
     ParentType,
@@ -292,8 +292,8 @@ export type PodcastSearchResultResolvers<
   image?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   thumbnail?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   podcastItunesId?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  latestPubDateMs?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  earliestPubDateMs?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  latestPubDate?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  earliestPubDate?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   genreIds?: Resolver<Array<ResolversTypes["Int"]>, ParentType, ContextType>;
   totalEpisodes?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
 };

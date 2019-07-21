@@ -40,6 +40,13 @@ export type ListennotesEpisodeSearchResult = {
 
 const truncateDescription = (desc: string) => desc.slice(0, 200)
 
+const isValidDate = (d: Date) => d instanceof Date && !isNaN(d as any)
+
+const convertToDate = (ms: number) => {
+  const date = new Date(ms)
+  return isValidDate(date) ? date.toLocaleDateString() : ""
+}
+
 export const toEpisodeSearchResult = (
   episode: ListennotesEpisodeSearchResult
 ): EpisodeSearchResult => ({
@@ -53,7 +60,7 @@ export const toEpisodeSearchResult = (
   image: episode.image,
   thumbnail: episode.thumbnail,
   podcastItunesId: episode.itunes_id,
-  pubDateMs: episode.pub_date_ms,
+  pubDate: convertToDate(episode.pub_date_ms),
   podcastListennotesId: episode.podcast_id,
   genreIds: episode.genre_ids,
   podcastTitle: episode.title_original,
@@ -72,8 +79,8 @@ export const toPodcastSearchResult = (
   image: podcast.image,
   thumbnail: podcast.thumbnail,
   podcastItunesId: podcast.itunes_id,
-  latestPubDateMs: podcast.latest_pub_date_ms,
-  earliestPubDateMs: podcast.earliest_pub_date_ms,
+  latestPubDate: convertToDate(podcast.latest_pub_date_ms),
+  earliestPubDate: convertToDate(podcast.earliest_pub_date_ms),
   genreIds: podcast.genre_ids,
   totalEpisodes: podcast.total_episodes
 })

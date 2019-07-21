@@ -12,7 +12,7 @@ export const typeDefs = gql`
     image: String!
     thumbnail: String!
     podcastItunesId: Int!
-    pubDateMs: Int!
+    pubDate: String!
     podcastListennotesId: String!
     genreIds: [Int!]!
     podcastTitle: String!
@@ -28,8 +28,8 @@ export const typeDefs = gql`
     image: String!
     thumbnail: String!
     podcastItunesId: Int!
-    latestPubDateMs: Int!
-    earliestPubDateMs: Int!
+    latestPubDate: String!
+    earliestPubDate: String!
     genreIds: [Int!]!
     totalEpisodes: Int!
   }
