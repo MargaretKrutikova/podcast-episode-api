@@ -17,9 +17,9 @@ export type Scalars = {
 
 export type BaseSearchInput = {
   language?: Maybe<Scalars["String"]>;
-  genreIds?: Maybe<Array<Maybe<Scalars["Int"]>>>;
+  genreIds?: Maybe<Array<Scalars["Int"]>>;
   searchTerm: Scalars["String"];
-  offset?: Maybe<Scalars["Int"]>;
+  offset: Scalars["Int"];
 };
 
 export enum CacheControlScope {
@@ -46,7 +46,7 @@ export type EpisodeSearchResult = {
   podcastItunesId: Scalars["Int"];
   pubDateMs?: Maybe<Scalars["Int"]>;
   podcastListennotesId: Scalars["String"];
-  genreIds: Array<Maybe<Scalars["Int"]>>;
+  genreIds: Array<Scalars["Int"]>;
   podcastTitle: Scalars["String"];
   podcastListennotesUrl?: Maybe<Scalars["String"]>;
 };
@@ -56,7 +56,7 @@ export type EpisodeSearchResults = {
   count: Scalars["Int"];
   nextOffset: Scalars["Int"];
   total: Scalars["Int"];
-  results: Array<Maybe<EpisodeSearchResult>>;
+  results: Array<EpisodeSearchResult>;
 };
 
 export type ItunesEpisode = {
@@ -78,7 +78,7 @@ export type PodcastSearchResult = {
   podcastItunesId: Scalars["Int"];
   latestPubDateMs: Scalars["Int"];
   earliestPubDateMs: Scalars["Int"];
-  genreIds: Array<Maybe<Scalars["Int"]>>;
+  genreIds: Array<Scalars["Int"]>;
   totalEpisodes: Scalars["Int"];
 };
 
@@ -87,7 +87,7 @@ export type PodcastSearchResults = {
   count: Scalars["Int"];
   nextOffset: Scalars["Int"];
   total: Scalars["Int"];
-  results: Array<Maybe<PodcastSearchResult>>;
+  results: Array<PodcastSearchResult>;
 };
 
 export type Query = {
@@ -248,11 +248,7 @@ export type EpisodeSearchResultResolvers<
     ParentType,
     ContextType
   >;
-  genreIds?: Resolver<
-    Array<Maybe<ResolversTypes["Int"]>>,
-    ParentType,
-    ContextType
-  >;
+  genreIds?: Resolver<Array<ResolversTypes["Int"]>, ParentType, ContextType>;
   podcastTitle?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   podcastListennotesUrl?: Resolver<
     Maybe<ResolversTypes["String"]>,
@@ -269,7 +265,7 @@ export type EpisodeSearchResultsResolvers<
   nextOffset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   total?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   results?: Resolver<
-    Array<Maybe<ResolversTypes["EpisodeSearchResult"]>>,
+    Array<ResolversTypes["EpisodeSearchResult"]>,
     ParentType,
     ContextType
   >;
@@ -306,11 +302,7 @@ export type PodcastSearchResultResolvers<
   podcastItunesId?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   latestPubDateMs?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   earliestPubDateMs?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  genreIds?: Resolver<
-    Array<Maybe<ResolversTypes["Int"]>>,
-    ParentType,
-    ContextType
-  >;
+  genreIds?: Resolver<Array<ResolversTypes["Int"]>, ParentType, ContextType>;
   totalEpisodes?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
 };
 
@@ -322,7 +314,7 @@ export type PodcastSearchResultsResolvers<
   nextOffset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   total?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   results?: Resolver<
-    Array<Maybe<ResolversTypes["PodcastSearchResult"]>>,
+    Array<ResolversTypes["PodcastSearchResult"]>,
     ParentType,
     ContextType
   >;

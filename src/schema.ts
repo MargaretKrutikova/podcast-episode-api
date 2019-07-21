@@ -14,7 +14,7 @@ export const typeDefs = gql`
     podcastItunesId: Int!
     pubDateMs: Int
     podcastListennotesId: String!
-    genreIds: [Int]!
+    genreIds: [Int!]!
     podcastTitle: String!
     podcastListennotesUrl: String
   }
@@ -30,20 +30,20 @@ export const typeDefs = gql`
     podcastItunesId: Int!
     latestPubDateMs: Int!
     earliestPubDateMs: Int!
-    genreIds: [Int]!
+    genreIds: [Int!]!
     totalEpisodes: Int!
   }
   type EpisodeSearchResults {
     count: Int!
     nextOffset: Int!
     total: Int!
-    results: [EpisodeSearchResult]!
+    results: [EpisodeSearchResult!]!
   }
   type PodcastSearchResults {
     count: Int!
     nextOffset: Int!
     total: Int!
-    results: [PodcastSearchResult]!
+    results: [PodcastSearchResult!]!
   }
   type ItunesEpisode {
     id: String
@@ -51,9 +51,9 @@ export const typeDefs = gql`
   }
   input BaseSearchInput {
     language: String
-    genreIds: [Int]
+    genreIds: [Int!]
     searchTerm: String!
-    offset: Int
+    offset: Int!
   }
   input EpisodeSearchInput {
     podcastId: String
