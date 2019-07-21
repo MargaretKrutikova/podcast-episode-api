@@ -22,14 +22,25 @@ const getSearchUrl = (
   content: ContentType,
   episodeInput?: EpisodeSearchInput | null
 ) => {
-  const { genreIds, language = "English", offset = 0, searchTerm } = baseInput
+  const { genreIds, language, offset = 0, searchTerm } = baseInput
+
   const genres = genreIds ? genreIds.join(",") : ""
   const { podcastId = "", excludePodcastId = "" } = episodeInput || {}
 
-  const url =
-    `${getListennotesApiUrl()}/search?type=${content}&safe_mode=1&q=${searchTerm}&sort_by_date=0` +
-    `&language=${language}&offset=${offset}&genre_ids=${genres}&ocid=${podcastId}&ncid=${excludePodcastId}`
+  let url = `${getListennotesApiUrl()}/search?type=${content}&safe_mode=1&q=${searchTerm}&sort_by_date=0&offset=${offset}`
 
+  if (language) {
+    url += `&language=${language}`
+  }
+  if (genres) {
+    url += `&genre_ids=${genres}`
+  }
+  if (podcastId) {
+    url += `&ocid=${podcastId}`
+  }
+  if (excludePodcastId) {
+    url += `&ncid=${excludePodcastId}`
+  }
   return url
 }
 
