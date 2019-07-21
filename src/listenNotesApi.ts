@@ -100,8 +100,7 @@ export const getPodcastById = async (podcastId: string) => {
 
   try {
     const { data } = await Axios.get<ListennotesPodcast>(url, getAxiosConfig())
-
-    if (!data || data.id) {
+    if (!data || !data.id) {
       return null
     }
     return toPodcast(data)
