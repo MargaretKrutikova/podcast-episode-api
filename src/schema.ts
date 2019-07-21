@@ -60,11 +60,11 @@ export const typeDefs = gql`
     excludePodcastId: String
   }
   type Query {
-    itunesEpisode(podcastId: String!, episodeName: String!): ItunesEpisode
+    itunesEpisode(podcastId: String!, episodeName: String!): ItunesEpisode!
     searchEpisodes(
       input: BaseSearchInput!
       episodeInput: EpisodeSearchInput
-    ): EpisodeSearchResults
-    searchPodcasts(input: BaseSearchInput!): PodcastSearchResults
+    ): EpisodeSearchResults!
+    searchPodcasts(input: BaseSearchInput!): PodcastSearchResults!
   }
 `

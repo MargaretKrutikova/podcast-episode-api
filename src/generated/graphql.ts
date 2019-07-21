@@ -92,9 +92,9 @@ export type PodcastSearchResults = {
 
 export type Query = {
   __typename?: "Query";
-  itunesEpisode?: Maybe<ItunesEpisode>;
-  searchEpisodes?: Maybe<EpisodeSearchResults>;
-  searchPodcasts?: Maybe<PodcastSearchResults>;
+  itunesEpisode: ItunesEpisode;
+  searchEpisodes: EpisodeSearchResults;
+  searchPodcasts: PodcastSearchResults;
 };
 
 export type QueryItunesEpisodeArgs = {
@@ -317,19 +317,19 @@ export type QueryResolvers<
   ParentType = ResolversParentTypes["Query"]
 > = {
   itunesEpisode?: Resolver<
-    Maybe<ResolversTypes["ItunesEpisode"]>,
+    ResolversTypes["ItunesEpisode"],
     ParentType,
     ContextType,
     QueryItunesEpisodeArgs
   >;
   searchEpisodes?: Resolver<
-    Maybe<ResolversTypes["EpisodeSearchResults"]>,
+    ResolversTypes["EpisodeSearchResults"],
     ParentType,
     ContextType,
     QuerySearchEpisodesArgs
   >;
   searchPodcasts?: Resolver<
-    Maybe<ResolversTypes["PodcastSearchResults"]>,
+    ResolversTypes["PodcastSearchResults"],
     ParentType,
     ContextType,
     QuerySearchPodcastsArgs
