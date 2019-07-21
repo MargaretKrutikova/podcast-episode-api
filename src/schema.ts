@@ -4,19 +4,19 @@ export const typeDefs = gql`
   type EpisodeSearchResult {
     listennotesId: String!
     listennotesUrl: String!
-    lengthSec: Int
+    lengthSec: Int!
     rss: String!
     description: String!
     title: String!
     publisher: String!
-    image: String
-    thumbnail: String
+    image: String!
+    thumbnail: String!
     podcastItunesId: Int!
-    pubDateMs: Int
+    pubDateMs: Int!
     podcastListennotesId: String!
     genreIds: [Int!]!
     podcastTitle: String!
-    podcastListennotesUrl: String
+    podcastListennotesUrl: String!
   }
   type PodcastSearchResult {
     listennotesId: String!
@@ -25,8 +25,8 @@ export const typeDefs = gql`
     description: String!
     title: String!
     publisher: String!
-    image: String
-    thumbnail: String
+    image: String!
+    thumbnail: String!
     podcastItunesId: Int!
     latestPubDateMs: Int!
     earliestPubDateMs: Int!
@@ -43,7 +43,7 @@ export const typeDefs = gql`
     count: Int!
     nextOffset: Int!
     total: Int!
-    results: [PodcastSearchResult!]!
+    results: [PodcastSearchResult]!
   }
   type ItunesEpisode {
     id: String

@@ -36,19 +36,19 @@ export type EpisodeSearchResult = {
   __typename?: "EpisodeSearchResult";
   listennotesId: Scalars["String"];
   listennotesUrl: Scalars["String"];
-  lengthSec?: Maybe<Scalars["Int"]>;
+  lengthSec: Scalars["Int"];
   rss: Scalars["String"];
   description: Scalars["String"];
   title: Scalars["String"];
   publisher: Scalars["String"];
-  image?: Maybe<Scalars["String"]>;
-  thumbnail?: Maybe<Scalars["String"]>;
+  image: Scalars["String"];
+  thumbnail: Scalars["String"];
   podcastItunesId: Scalars["Int"];
-  pubDateMs?: Maybe<Scalars["Int"]>;
+  pubDateMs: Scalars["Int"];
   podcastListennotesId: Scalars["String"];
   genreIds: Array<Scalars["Int"]>;
   podcastTitle: Scalars["String"];
-  podcastListennotesUrl?: Maybe<Scalars["String"]>;
+  podcastListennotesUrl: Scalars["String"];
 };
 
 export type EpisodeSearchResults = {
@@ -73,8 +73,8 @@ export type PodcastSearchResult = {
   description: Scalars["String"];
   title: Scalars["String"];
   publisher: Scalars["String"];
-  image?: Maybe<Scalars["String"]>;
-  thumbnail?: Maybe<Scalars["String"]>;
+  image: Scalars["String"];
+  thumbnail: Scalars["String"];
   podcastItunesId: Scalars["Int"];
   latestPubDateMs: Scalars["Int"];
   earliestPubDateMs: Scalars["Int"];
@@ -87,7 +87,7 @@ export type PodcastSearchResults = {
   count: Scalars["Int"];
   nextOffset: Scalars["Int"];
   total: Scalars["Int"];
-  results: Array<PodcastSearchResult>;
+  results: Array<Maybe<PodcastSearchResult>>;
 };
 
 export type Query = {
@@ -230,19 +230,15 @@ export type EpisodeSearchResultResolvers<
 > = {
   listennotesId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   listennotesUrl?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  lengthSec?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  lengthSec?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   rss?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   publisher?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  image?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  thumbnail?: Resolver<
-    Maybe<ResolversTypes["String"]>,
-    ParentType,
-    ContextType
-  >;
+  image?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  thumbnail?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   podcastItunesId?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  pubDateMs?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  pubDateMs?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   podcastListennotesId?: Resolver<
     ResolversTypes["String"],
     ParentType,
@@ -251,7 +247,7 @@ export type EpisodeSearchResultResolvers<
   genreIds?: Resolver<Array<ResolversTypes["Int"]>, ParentType, ContextType>;
   podcastTitle?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   podcastListennotesUrl?: Resolver<
-    Maybe<ResolversTypes["String"]>,
+    ResolversTypes["String"],
     ParentType,
     ContextType
   >;
@@ -293,12 +289,8 @@ export type PodcastSearchResultResolvers<
   description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   publisher?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  image?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  thumbnail?: Resolver<
-    Maybe<ResolversTypes["String"]>,
-    ParentType,
-    ContextType
-  >;
+  image?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  thumbnail?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   podcastItunesId?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   latestPubDateMs?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   earliestPubDateMs?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -314,7 +306,7 @@ export type PodcastSearchResultsResolvers<
   nextOffset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   total?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   results?: Resolver<
-    Array<ResolversTypes["PodcastSearchResult"]>,
+    Array<Maybe<ResolversTypes["PodcastSearchResult"]>>,
     ParentType,
     ContextType
   >;
