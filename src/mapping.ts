@@ -63,7 +63,7 @@ export const toEpisodeSearchResult = (
   pubDate: convertToDate(episode.pub_date_ms),
   podcastListennotesId: episode.podcast_id,
   genreIds: episode.genre_ids,
-  podcastTitle: episode.title_original,
+  podcastTitle: episode.podcast_title_original,
   podcastListennotesUrl: episode.podcast_listennotes_url
 })
 
