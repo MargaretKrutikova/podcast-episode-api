@@ -66,5 +66,6 @@ export const typeDefs = gql`
       episodeInput: EpisodeSearchInput
     ): EpisodeSearchResults!
     searchPodcasts(input: BaseSearchInput!): PodcastSearchResults!
+    getPodcastById(podcastId: String!): PodcastSearchResult
   }
 `

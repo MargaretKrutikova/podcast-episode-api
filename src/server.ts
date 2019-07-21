@@ -4,12 +4,14 @@ import { typeDefs } from "./schema"
 import {
   Resolvers,
   QuerySearchEpisodesArgs,
-  QuerySearchPodcastsArgs
+  QuerySearchPodcastsArgs,
+  QueryGetPodcastByIdArgs
 } from "./generated/graphql"
 import { getItunesEpisode, ItunesEpisodeQuery } from "./itunesApi"
 import {
   getEpisodeSearchResults,
-  getPodcastSearchResults
+  getPodcastSearchResults,
+  getPodcastById
 } from "./listenNotesApi"
 
 import "./env"
@@ -21,7 +23,9 @@ const resolvers: Resolvers = {
     searchEpisodes: (_: any, params: QuerySearchEpisodesArgs) =>
       getEpisodeSearchResults(params.input, params.episodeInput),
     searchPodcasts: (_: any, params: QuerySearchPodcastsArgs) =>
-      getPodcastSearchResults(params.input)
+      getPodcastSearchResults(params.input),
+    getPodcastById: (_: any, params: QueryGetPodcastByIdArgs) =>
+      getPodcastById(params.podcastId)
   }
 }
 

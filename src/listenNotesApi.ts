@@ -9,7 +9,9 @@ import {
   toEpisodeSearchResult,
   ListennotesEpisodeSearchResult,
   ListennotesPodcastSearchResult,
-  toPodcastSearchResult
+  toPodcastSearchResult,
+  ListennotesPodcast,
+  toPodcast
 } from "./mapping"
 import Axios from "axios"
 
@@ -44,17 +46,22 @@ const getSearchUrl = (
   return url
 }
 
+const getAxiosConfig = () => ({
+  headers: {
+    "X-ListenAPI-Key": process.env.LISTEN_NOTES_API_KEY
+  }
+})
+
 export const getEpisodeSearchResults = async (
   input: BaseSearchInput,
   episodeInput?: EpisodeSearchInput | null
 ) => {
   const url = getSearchUrl(input, "episode", episodeInput)
 
-  const { data } = await Axios.get<ListennotesSearchResult>(url, {
-    headers: {
-      "X-ListenAPI-Key": process.env.LISTEN_NOTES_API_KEY
-    }
-  })
+  const { data } = await Axios.get<ListennotesSearchResult>(
+    url,
+    getAxiosConfig()
+  )
 
   const searchResponse: EpisodeSearchResults = {
     count: data.count,
@@ -71,11 +78,10 @@ export const getEpisodeSearchResults = async (
 export const getPodcastSearchResults = async (input: BaseSearchInput) => {
   const url = getSearchUrl(input, "podcast")
 
-  const { data } = await Axios.get<ListennotesSearchResult>(url, {
-    headers: {
-      "X-ListenAPI-Key": process.env.LISTEN_NOTES_API_KEY
-    }
-  })
+  const { data } = await Axios.get<ListennotesSearchResult>(
+    url,
+    getAxiosConfig()
+  )
 
   const searchResponse: PodcastSearchResults = {
     count: data.count,
@@ -87,4 +93,19 @@ export const getPodcastSearchResults = async (input: BaseSearchInput) => {
   }
 
   return searchResponse
+}
+
+export const getPodcastById = async (podcastId: string) => {
+  const url = `${getListennotesApiUrl()}/podcasts/${podcastId}`
+
+  try {
+    const { data } = await Axios.get<ListennotesPodcast>(url, getAxiosConfig())
+
+    if (!data || data.id) {
+      return null
+    }
+    return toPodcast(data)
+  } catch {
+    return null
+  }
 }

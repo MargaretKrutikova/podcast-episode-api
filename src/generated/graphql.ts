@@ -95,6 +95,7 @@ export type Query = {
   itunesEpisode: ItunesEpisode;
   searchEpisodes: EpisodeSearchResults;
   searchPodcasts: PodcastSearchResults;
+  getPodcastById?: Maybe<PodcastSearchResult>;
 };
 
 export type QueryItunesEpisodeArgs = {
@@ -109,6 +110,10 @@ export type QuerySearchEpisodesArgs = {
 
 export type QuerySearchPodcastsArgs = {
   input: BaseSearchInput;
+};
+
+export type QueryGetPodcastByIdArgs = {
+  podcastId: Scalars["String"];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -333,6 +338,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     QuerySearchPodcastsArgs
+  >;
+  getPodcastById?: Resolver<
+    Maybe<ResolversTypes["PodcastSearchResult"]>,
+    ParentType,
+    ContextType,
+    QueryGetPodcastByIdArgs
   >;
 };
 

@@ -19,6 +19,22 @@ export type ListennotesPodcastSearchResult = {
   total_episodes: number
 }
 
+export type ListennotesPodcast = {
+  rss: string
+  description: string
+  title: string
+  publisher: string
+  image: string
+  thumbnail: string
+  itunes_id: number
+  latest_pub_date_ms: number
+  earliest_pub_date_ms: number
+  id: string
+  genre_ids: number[]
+  listennotes_url: string
+  total_episodes: number
+}
+
 export type ListennotesEpisodeSearchResult = {
   audio_length_sec: number
   rss: string
@@ -76,6 +92,24 @@ export const toPodcastSearchResult = (
   description: truncateDescription(podcast.description_original),
   title: podcast.title_original,
   publisher: podcast.publisher_original,
+  image: podcast.image,
+  thumbnail: podcast.thumbnail,
+  podcastItunesId: podcast.itunes_id,
+  latestPubDate: convertToDate(podcast.latest_pub_date_ms),
+  earliestPubDate: convertToDate(podcast.earliest_pub_date_ms),
+  genreIds: podcast.genre_ids,
+  totalEpisodes: podcast.total_episodes
+})
+
+export const toPodcast = (
+  podcast: ListennotesPodcast
+): PodcastSearchResult => ({
+  listennotesId: podcast.id,
+  listennotesUrl: podcast.listennotes_url,
+  rss: podcast.rss,
+  description: truncateDescription(podcast.description),
+  title: podcast.title,
+  publisher: podcast.publisher,
   image: podcast.image,
   thumbnail: podcast.thumbnail,
   podcastItunesId: podcast.itunes_id,
