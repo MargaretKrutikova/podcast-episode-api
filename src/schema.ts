@@ -43,7 +43,7 @@ export const typeDefs = gql`
     count: Int!
     nextOffset: Int!
     total: Int!
-    results: [PodcastSearchResult]!
+    results: [PodcastSearchResult!]!
   }
   type ItunesEpisode {
     id: String

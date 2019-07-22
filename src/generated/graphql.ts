@@ -87,7 +87,7 @@ export type PodcastSearchResults = {
   count: Scalars["Int"];
   nextOffset: Scalars["Int"];
   total: Scalars["Int"];
-  results: Array<Maybe<PodcastSearchResult>>;
+  results: Array<PodcastSearchResult>;
 };
 
 export type Query = {
@@ -311,7 +311,7 @@ export type PodcastSearchResultsResolvers<
   nextOffset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   total?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   results?: Resolver<
-    Array<Maybe<ResolversTypes["PodcastSearchResult"]>>,
+    Array<ResolversTypes["PodcastSearchResult"]>,
     ParentType,
     ContextType
   >;
