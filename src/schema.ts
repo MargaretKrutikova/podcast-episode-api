@@ -63,5 +63,7 @@ export const typeDefs = gql`
     itunesEpisode(podcastId: String!, episodeName: String!): ItunesEpisode!
     search(input: SearchInput!): SearchResults!
     getPodcastById(podcastId: String!): Podcast
+    getEpisodesByIds(ids: [String!]!): [Episode!]!
+    getPodcastsByIds(ids: [String!]!): [Podcast!]!
   }
 `

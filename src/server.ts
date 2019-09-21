@@ -6,10 +6,15 @@ import {
   QuerySearchArgs,
   QueryGetPodcastByIdArgs,
   Episode,
-  Podcast
+  Podcast,
+  QueryGetEpisodesByIdsArgs
 } from "./generated/graphql"
 import { getItunesEpisode, ItunesEpisodeQuery } from "./itunesApi"
-import { getPodcastById, getSearchResults } from "./listenNotesApi"
+import {
+  getPodcastById,
+  getSearchResults,
+  getPodcastsByIds
+} from "./listenNotesApi"
 
 import "./env"
 
@@ -32,7 +37,12 @@ const resolvers: Resolvers = {
       getItunesEpisode(params),
     search: (_: any, params: QuerySearchArgs) => getSearchResults(params.input),
     getPodcastById: (_: any, params: QueryGetPodcastByIdArgs) =>
-      getPodcastById(params.podcastId)
+      getPodcastById(params.podcastId),
+    /** batch get */
+    getPodcastsByIds: (_: any, params: QueryGetEpisodesByIdsArgs) =>
+      getPodcastsByIds(params.ids),
+    getEpisodesByIds: (_: any, params: QueryGetEpisodesByIdsArgs) =>
+      getPodcastsByIds(params.ids) as any
   }
 }
 

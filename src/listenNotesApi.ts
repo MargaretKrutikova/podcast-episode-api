@@ -6,7 +6,9 @@ import {
   ListennotesPodcastSearchResult,
   fromPodcastSearchResult,
   ListennotesPodcast,
-  fromPodcast
+  fromPodcast,
+  ListennotesEpisode,
+  fromEpisode
 } from "./mapping"
 import Axios from "axios"
 
@@ -42,9 +44,14 @@ const getSearchUrl = (input: SearchInput) => {
   return url
 }
 
-const getAxiosConfig = () => ({
+const getAxiosConfig = (formEncoded = false) => ({
   headers: {
-    "X-ListenAPI-Key": process.env.LISTEN_NOTES_API_KEY
+    "X-ListenAPI-Key": process.env.LISTEN_NOTES_API_KEY,
+    ...(formEncoded
+      ? {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      : {})
   }
 })
 
@@ -71,6 +78,44 @@ export const getSearchResults = async (input: SearchInput) => {
   }
 
   return searchResponse
+}
+
+export const getPodcastsByIds = async (ids: string[]) => {
+  const url = `${getListennotesApiUrl()}/podcasts`
+
+  try {
+    const response = await Axios.post<{ podcasts: ListennotesPodcast[] }>(
+      url,
+      `ids=${ids.join(",")}`,
+      getAxiosConfig(true)
+    )
+
+    if (!response.data || !response.data.podcasts) {
+      return []
+    }
+    return response.data.podcasts.map(fromPodcast)
+  } catch {
+    return []
+  }
+}
+
+export const getEpisodesByIds = async (ids: string[]) => {
+  const url = `${getListennotesApiUrl()}/episodes`
+
+  try {
+    const response = await Axios.post<{ episodes: ListennotesEpisode[] }>(
+      url,
+      `ids=${ids.join(",")}`,
+      getAxiosConfig(true)
+    )
+
+    if (!response.data || !response.data.episodes) {
+      return []
+    }
+    return response.data.episodes.map(fromEpisode)
+  } catch {
+    return []
+  }
 }
 
 export const getPodcastById = async (podcastId: string) => {
