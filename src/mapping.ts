@@ -1,4 +1,4 @@
-import { EpisodeSearchResult, PodcastSearchResult } from "./generated/graphql"
+import { Episode, Podcast } from "./generated/graphql"
 
 export type ListennotesPodcastSearchResult = {
   rss: string
@@ -63,10 +63,10 @@ const convertToDate = (ms: number) => {
   return isValidDate(date) ? date.toLocaleDateString() : ""
 }
 
-export const toEpisodeSearchResult = (
+export const fromEpisodeSearchResult = (
   episode: ListennotesEpisodeSearchResult
-): EpisodeSearchResult => ({
-  listennotesId: episode.id,
+): Episode => ({
+  id: episode.id,
   listennotesUrl: episode.listennotes_url,
   lengthSec: episode.audio_length_sec,
   rss: episode.rss,
@@ -77,16 +77,16 @@ export const toEpisodeSearchResult = (
   thumbnail: episode.thumbnail,
   podcastItunesId: episode.itunes_id,
   pubDate: convertToDate(episode.pub_date_ms),
-  podcastListennotesId: episode.podcast_id,
+  podcastId: episode.podcast_id,
   genreIds: episode.genre_ids,
   podcastTitle: episode.podcast_title_original,
   podcastListennotesUrl: episode.podcast_listennotes_url
 })
 
-export const toPodcastSearchResult = (
+export const fromPodcastSearchResult = (
   podcast: ListennotesPodcastSearchResult
-): PodcastSearchResult => ({
-  listennotesId: podcast.id,
+): Podcast => ({
+  id: podcast.id,
   listennotesUrl: podcast.listennotes_url,
   rss: podcast.rss,
   description: truncateDescription(podcast.description_original),
@@ -101,10 +101,8 @@ export const toPodcastSearchResult = (
   totalEpisodes: podcast.total_episodes
 })
 
-export const toPodcast = (
-  podcast: ListennotesPodcast
-): PodcastSearchResult => ({
-  listennotesId: podcast.id,
+export const fromPodcast = (podcast: ListennotesPodcast): Podcast => ({
+  id: podcast.id,
   listennotesUrl: podcast.listennotes_url,
   rss: podcast.rss,
   description: truncateDescription(podcast.description),
