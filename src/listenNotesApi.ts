@@ -1,35 +1,33 @@
-import {
-  BaseSearchInput,
-  EpisodeSearchInput,
-  EpisodeSearchResults,
-  PodcastSearchResults
-} from "./generated/graphql"
+import { SearchInput, SearchResults, Search_Type } from "./generated/graphql"
 import {
   ListennotesSearchResult,
-  toEpisodeSearchResult,
+  fromEpisodeSearchResult,
   ListennotesEpisodeSearchResult,
   ListennotesPodcastSearchResult,
-  toPodcastSearchResult,
+  fromPodcastSearchResult,
   ListennotesPodcast,
-  toPodcast
+  fromPodcast,
+  ListennotesEpisode,
+  fromEpisode
 } from "./mapping"
 import Axios from "axios"
 
 const getListennotesApiUrl = () => "https://listen-api.listennotes.com/api/v2"
 
-type ContentType = "episode" | "podcast"
-
-const getSearchUrl = (
-  baseInput: BaseSearchInput,
-  content: ContentType,
-  episodeInput?: EpisodeSearchInput | null
-) => {
-  const { genreIds, language, offset = 0, searchTerm } = baseInput
+const getSearchUrl = (input: SearchInput) => {
+  const {
+    genreIds,
+    language,
+    offset = 0,
+    searchTerm,
+    podcastId = "",
+    excludePodcastId = "",
+    searchType
+  } = input
 
   const genres = genreIds ? genreIds.join(",") : ""
-  const { podcastId = "", excludePodcastId = "" } = episodeInput || {}
 
-  let url = `${getListennotesApiUrl()}/search?type=${content}&safe_mode=1&q=${searchTerm}&sort_by_date=0&offset=${offset}`
+  let url = `${getListennotesApiUrl()}/search?type=${searchType.toLowerCase()}&safe_mode=1&q=${searchTerm}&sort_by_date=0&offset=${offset}`
 
   if (language) {
     url += `&language=${language}`
@@ -46,53 +44,78 @@ const getSearchUrl = (
   return url
 }
 
-const getAxiosConfig = () => ({
+const getAxiosConfig = (formEncoded = false) => ({
   headers: {
-    "X-ListenAPI-Key": process.env.LISTEN_NOTES_API_KEY
+    "X-ListenAPI-Key": process.env.LISTEN_NOTES_API_KEY,
+    ...(formEncoded
+      ? {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      : {})
   }
 })
 
-export const getEpisodeSearchResults = async (
-  input: BaseSearchInput,
-  episodeInput?: EpisodeSearchInput | null
-) => {
-  const url = getSearchUrl(input, "episode", episodeInput)
+export const getSearchResults = async (input: SearchInput) => {
+  const url = getSearchUrl(input)
 
   const { data } = await Axios.get<ListennotesSearchResult>(
     url,
     getAxiosConfig()
   )
 
-  const searchResponse: EpisodeSearchResults = {
+  const searchResponse: SearchResults = {
     count: data.count,
     nextOffset: data.next_offset,
     total: data.total,
-    results: (data.results as ListennotesEpisodeSearchResult[]).map(
-      toEpisodeSearchResult
-    )
+    results:
+      input.searchType === Search_Type.Episode
+        ? (data.results as ListennotesEpisodeSearchResult[]).map(
+            fromEpisodeSearchResult
+          )
+        : (data.results as ListennotesPodcastSearchResult[]).map(
+            fromPodcastSearchResult
+          )
   }
 
   return searchResponse
 }
 
-export const getPodcastSearchResults = async (input: BaseSearchInput) => {
-  const url = getSearchUrl(input, "podcast")
+export const getPodcastsByIds = async (ids: string[]) => {
+  const url = `${getListennotesApiUrl()}/podcasts`
 
-  const { data } = await Axios.get<ListennotesSearchResult>(
-    url,
-    getAxiosConfig()
-  )
-
-  const searchResponse: PodcastSearchResults = {
-    count: data.count,
-    nextOffset: data.next_offset,
-    total: data.total,
-    results: (data.results as ListennotesPodcastSearchResult[]).map(
-      toPodcastSearchResult
+  try {
+    const response = await Axios.post<{ podcasts: ListennotesPodcast[] }>(
+      url,
+      `ids=${ids.join(",")}`,
+      getAxiosConfig(true)
     )
-  }
 
-  return searchResponse
+    if (!response.data || !response.data.podcasts) {
+      return []
+    }
+    return response.data.podcasts.map(fromPodcast)
+  } catch {
+    return []
+  }
+}
+
+export const getEpisodesByIds = async (ids: string[]) => {
+  const url = `${getListennotesApiUrl()}/episodes`
+
+  try {
+    const response = await Axios.post<{ episodes: ListennotesEpisode[] }>(
+      url,
+      `ids=${ids.join(",")}`,
+      getAxiosConfig(true)
+    )
+
+    if (!response.data || !response.data.episodes) {
+      return []
+    }
+    return response.data.episodes.map(fromEpisode)
+  } catch {
+    return []
+  }
 }
 
 export const getPodcastById = async (podcastId: string) => {
@@ -103,7 +126,7 @@ export const getPodcastById = async (podcastId: string) => {
     if (!data || !data.id) {
       return null
     }
-    return toPodcast(data)
+    return fromPodcast(data)
   } catch {
     return null
   }

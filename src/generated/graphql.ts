@@ -1,156 +1,147 @@
-import {
-  GraphQLResolveInfo,
-  GraphQLScalarType,
-  GraphQLScalarTypeConfig
-} from "graphql";
-export type Maybe<T> = T | null;
+import { GraphQLResolveInfo } from "graphql"
+export type Maybe<T> = T | null
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  /** The `Upload` scalar type represents a file upload. */
-  Upload: any;
-};
-
-export type BaseSearchInput = {
-  language?: Maybe<Scalars["String"]>;
-  genreIds?: Maybe<Array<Scalars["Int"]>>;
-  searchTerm: Scalars["String"];
-  offset: Scalars["Int"];
-};
-
-export enum CacheControlScope {
-  Public = "PUBLIC",
-  Private = "PRIVATE"
+  ID: string
+  String: string
+  Boolean: boolean
+  Int: number
+  Float: number
 }
 
-export type EpisodeSearchInput = {
-  podcastId?: Maybe<Scalars["String"]>;
-  excludePodcastId?: Maybe<Scalars["String"]>;
-};
-
-export type EpisodeSearchResult = {
-  __typename?: "EpisodeSearchResult";
-  listennotesId: Scalars["String"];
-  listennotesUrl: Scalars["String"];
-  lengthSec: Scalars["Int"];
-  rss: Scalars["String"];
-  description: Scalars["String"];
-  title: Scalars["String"];
-  publisher: Scalars["String"];
-  image: Scalars["String"];
-  thumbnail: Scalars["String"];
-  podcastItunesId: Scalars["Int"];
-  pubDate: Scalars["String"];
-  podcastListennotesId: Scalars["String"];
-  genreIds: Array<Scalars["Int"]>;
-  podcastTitle: Scalars["String"];
-  podcastListennotesUrl: Scalars["String"];
-};
-
-export type EpisodeSearchResults = {
-  __typename?: "EpisodeSearchResults";
-  count: Scalars["Int"];
-  nextOffset: Scalars["Int"];
-  total: Scalars["Int"];
-  results: Array<EpisodeSearchResult>;
-};
+export type Episode = {
+  __typename?: "Episode"
+  id: Scalars["String"]
+  listennotesUrl: Scalars["String"]
+  lengthSec: Scalars["Int"]
+  rss: Scalars["String"]
+  description: Scalars["String"]
+  title: Scalars["String"]
+  publisher: Scalars["String"]
+  image: Scalars["String"]
+  thumbnail: Scalars["String"]
+  podcastItunesId: Scalars["Int"]
+  pubDate: Scalars["String"]
+  podcastId: Scalars["String"]
+  genreIds: Array<Scalars["Int"]>
+  podcastTitle: Scalars["String"]
+  podcastListennotesUrl: Scalars["String"]
+}
 
 export type ItunesEpisode = {
-  __typename?: "ItunesEpisode";
-  id?: Maybe<Scalars["String"]>;
-  websiteUrl?: Maybe<Scalars["String"]>;
-};
+  __typename?: "ItunesEpisode"
+  id?: Maybe<Scalars["String"]>
+  websiteUrl?: Maybe<Scalars["String"]>
+}
 
-export type PodcastSearchResult = {
-  __typename?: "PodcastSearchResult";
-  listennotesId: Scalars["String"];
-  listennotesUrl: Scalars["String"];
-  rss: Scalars["String"];
-  description: Scalars["String"];
-  title: Scalars["String"];
-  publisher: Scalars["String"];
-  image: Scalars["String"];
-  thumbnail: Scalars["String"];
-  podcastItunesId: Scalars["Int"];
-  latestPubDate: Scalars["String"];
-  earliestPubDate: Scalars["String"];
-  genreIds: Array<Scalars["Int"]>;
-  totalEpisodes: Scalars["Int"];
-};
-
-export type PodcastSearchResults = {
-  __typename?: "PodcastSearchResults";
-  count: Scalars["Int"];
-  nextOffset: Scalars["Int"];
-  total: Scalars["Int"];
-  results: Array<PodcastSearchResult>;
-};
+export type Podcast = {
+  __typename?: "Podcast"
+  id: Scalars["String"]
+  listennotesUrl: Scalars["String"]
+  rss: Scalars["String"]
+  description: Scalars["String"]
+  title: Scalars["String"]
+  publisher: Scalars["String"]
+  image: Scalars["String"]
+  thumbnail: Scalars["String"]
+  podcastItunesId: Scalars["Int"]
+  latestPubDate: Scalars["String"]
+  earliestPubDate: Scalars["String"]
+  genreIds: Array<Scalars["Int"]>
+  totalEpisodes: Scalars["Int"]
+}
 
 export type Query = {
-  __typename?: "Query";
-  itunesEpisode: ItunesEpisode;
-  searchEpisodes: EpisodeSearchResults;
-  searchPodcasts: PodcastSearchResults;
-  getPodcastById?: Maybe<PodcastSearchResult>;
-};
+  __typename?: "Query"
+  itunesEpisode: ItunesEpisode
+  search: SearchResults
+  getPodcastById?: Maybe<Podcast>
+  getEpisodesByIds: Array<Episode>
+  getPodcastsByIds: Array<Podcast>
+}
 
 export type QueryItunesEpisodeArgs = {
-  podcastId: Scalars["String"];
-  episodeName: Scalars["String"];
-};
+  podcastId: Scalars["String"]
+  episodeName: Scalars["String"]
+}
 
-export type QuerySearchEpisodesArgs = {
-  input: BaseSearchInput;
-  episodeInput?: Maybe<EpisodeSearchInput>;
-};
-
-export type QuerySearchPodcastsArgs = {
-  input: BaseSearchInput;
-};
+export type QuerySearchArgs = {
+  input: SearchInput
+}
 
 export type QueryGetPodcastByIdArgs = {
-  podcastId: Scalars["String"];
-};
+  podcastId: Scalars["String"]
+}
 
-export type ResolverTypeWrapper<T> = Promise<T> | T;
+export type QueryGetEpisodesByIdsArgs = {
+  ids: Array<Scalars["String"]>
+}
+
+export type QueryGetPodcastsByIdsArgs = {
+  ids: Array<Scalars["String"]>
+}
+
+export enum Search_Type {
+  Episode = "EPISODE",
+  Podcast = "PODCAST"
+}
+
+export type SearchInput = {
+  searchType: Search_Type
+  language?: Maybe<Scalars["String"]>
+  genreIds?: Maybe<Array<Scalars["Int"]>>
+  searchTerm: Scalars["String"]
+  offset: Scalars["Int"]
+  podcastId?: Maybe<Scalars["String"]>
+  excludePodcastId?: Maybe<Scalars["String"]>
+}
+
+export type SearchResult = Episode | Podcast
+
+export type SearchResults = {
+  __typename?: "SearchResults"
+  count: Scalars["Int"]
+  nextOffset: Scalars["Int"]
+  total: Scalars["Int"]
+  results: Array<SearchResult>
+}
+
+export type ResolverTypeWrapper<T> = Promise<T> | T
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
-) => Promise<TResult> | TResult;
+) => Promise<TResult> | TResult
 
 export type StitchingResolver<TResult, TParent, TContext, TArgs> = {
-  fragment: string;
-  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};
+  fragment: string
+  resolve: ResolverFn<TResult, TParent, TContext, TArgs>
+}
 
 export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
   | ResolverFn<TResult, TParent, TContext, TArgs>
-  | StitchingResolver<TResult, TParent, TContext, TArgs>;
+  | StitchingResolver<TResult, TParent, TContext, TArgs>
 
 export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
-) => AsyncIterator<TResult> | Promise<AsyncIterator<TResult>>;
+) => AsyncIterator<TResult> | Promise<AsyncIterator<TResult>>
 
 export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
-) => TResult | Promise<TResult>;
+) => TResult | Promise<TResult>
 
 export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs> {
-  subscribe: SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs>;
-  resolve?: SubscriptionResolveFn<TResult, TParent, TContext, TArgs>;
+  subscribe: SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs>
+  resolve?: SubscriptionResolveFn<TResult, TParent, TContext, TArgs>
 }
 
 export type SubscriptionResolver<
@@ -162,15 +153,15 @@ export type SubscriptionResolver<
   | ((
       ...args: any[]
     ) => SubscriptionResolverObject<TResult, TParent, TContext, TArgs>)
-  | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
+  | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>
 
 export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   parent: TParent,
   context: TContext,
   info: GraphQLResolveInfo
-) => Maybe<TTypes>;
+) => Maybe<TTypes>
 
-export type NextResolverFn<T> = () => Promise<T>;
+export type NextResolverFn<T> = () => Promise<T>
 
 export type DirectiveResolverFn<
   TResult = {},
@@ -183,139 +174,99 @@ export type DirectiveResolverFn<
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
-) => TResult | Promise<TResult>;
+) => TResult | Promise<TResult>
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Query: ResolverTypeWrapper<{}>;
-  String: ResolverTypeWrapper<Scalars["String"]>;
-  ItunesEpisode: ResolverTypeWrapper<ItunesEpisode>;
-  BaseSearchInput: BaseSearchInput;
-  Int: ResolverTypeWrapper<Scalars["Int"]>;
-  EpisodeSearchInput: EpisodeSearchInput;
-  EpisodeSearchResults: ResolverTypeWrapper<EpisodeSearchResults>;
-  EpisodeSearchResult: ResolverTypeWrapper<EpisodeSearchResult>;
-  PodcastSearchResults: ResolverTypeWrapper<PodcastSearchResults>;
-  PodcastSearchResult: ResolverTypeWrapper<PodcastSearchResult>;
-  Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
-  CacheControlScope: CacheControlScope;
-  Upload: ResolverTypeWrapper<Scalars["Upload"]>;
-};
+  Query: ResolverTypeWrapper<{}>
+  String: ResolverTypeWrapper<Scalars["String"]>
+  ItunesEpisode: ResolverTypeWrapper<ItunesEpisode>
+  SearchInput: SearchInput
+  SEARCH_TYPE: Search_Type
+  Int: ResolverTypeWrapper<Scalars["Int"]>
+  SearchResults: ResolverTypeWrapper<
+    Omit<SearchResults, "results"> & {
+      results: Array<ResolversTypes["SearchResult"]>
+    }
+  >
+  SearchResult: ResolversTypes["Episode"] | ResolversTypes["Podcast"]
+  Episode: ResolverTypeWrapper<Episode>
+  Podcast: ResolverTypeWrapper<Podcast>
+  Boolean: ResolverTypeWrapper<Scalars["Boolean"]>
+}
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Query: {};
-  String: Scalars["String"];
-  ItunesEpisode: ItunesEpisode;
-  BaseSearchInput: BaseSearchInput;
-  Int: Scalars["Int"];
-  EpisodeSearchInput: EpisodeSearchInput;
-  EpisodeSearchResults: EpisodeSearchResults;
-  EpisodeSearchResult: EpisodeSearchResult;
-  PodcastSearchResults: PodcastSearchResults;
-  PodcastSearchResult: PodcastSearchResult;
-  Boolean: Scalars["Boolean"];
-  CacheControlScope: CacheControlScope;
-  Upload: Scalars["Upload"];
-};
-
-export type CacheControlDirectiveResolver<
-  Result,
-  Parent,
-  ContextType = any,
-  Args = {
-    maxAge?: Maybe<Maybe<Scalars["Int"]>>;
-    scope?: Maybe<Maybe<CacheControlScope>>;
+  Query: {}
+  String: Scalars["String"]
+  ItunesEpisode: ItunesEpisode
+  SearchInput: SearchInput
+  SEARCH_TYPE: Search_Type
+  Int: Scalars["Int"]
+  SearchResults: Omit<SearchResults, "results"> & {
+    results: Array<ResolversTypes["SearchResult"]>
   }
-> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+  SearchResult: ResolversTypes["Episode"] | ResolversTypes["Podcast"]
+  Episode: Episode
+  Podcast: Podcast
+  Boolean: Scalars["Boolean"]
+}
 
-export type EpisodeSearchResultResolvers<
+export type EpisodeResolvers<
   ContextType = any,
-  ParentType = ResolversParentTypes["EpisodeSearchResult"]
+  ParentType = ResolversParentTypes["Episode"]
 > = {
-  listennotesId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  listennotesUrl?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  lengthSec?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  rss?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  publisher?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  image?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  thumbnail?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  podcastItunesId?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  pubDate?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  podcastListennotesId?: Resolver<
-    ResolversTypes["String"],
-    ParentType,
-    ContextType
-  >;
-  genreIds?: Resolver<Array<ResolversTypes["Int"]>, ParentType, ContextType>;
-  podcastTitle?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  listennotesUrl?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  lengthSec?: Resolver<ResolversTypes["Int"], ParentType, ContextType>
+  rss?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  description?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  title?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  publisher?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  image?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  thumbnail?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  podcastItunesId?: Resolver<ResolversTypes["Int"], ParentType, ContextType>
+  pubDate?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  podcastId?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  genreIds?: Resolver<Array<ResolversTypes["Int"]>, ParentType, ContextType>
+  podcastTitle?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   podcastListennotesUrl?: Resolver<
     ResolversTypes["String"],
     ParentType,
     ContextType
-  >;
-};
-
-export type EpisodeSearchResultsResolvers<
-  ContextType = any,
-  ParentType = ResolversParentTypes["EpisodeSearchResults"]
-> = {
-  count?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  nextOffset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  total?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  results?: Resolver<
-    Array<ResolversTypes["EpisodeSearchResult"]>,
-    ParentType,
-    ContextType
-  >;
-};
+  >
+}
 
 export type ItunesEpisodeResolvers<
   ContextType = any,
   ParentType = ResolversParentTypes["ItunesEpisode"]
 > = {
-  id?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   websiteUrl?: Resolver<
     Maybe<ResolversTypes["String"]>,
     ParentType,
     ContextType
-  >;
-};
+  >
+}
 
-export type PodcastSearchResultResolvers<
+export type PodcastResolvers<
   ContextType = any,
-  ParentType = ResolversParentTypes["PodcastSearchResult"]
+  ParentType = ResolversParentTypes["Podcast"]
 > = {
-  listennotesId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  listennotesUrl?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  rss?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  publisher?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  image?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  thumbnail?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  podcastItunesId?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  latestPubDate?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  earliestPubDate?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  genreIds?: Resolver<Array<ResolversTypes["Int"]>, ParentType, ContextType>;
-  totalEpisodes?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-};
-
-export type PodcastSearchResultsResolvers<
-  ContextType = any,
-  ParentType = ResolversParentTypes["PodcastSearchResults"]
-> = {
-  count?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  nextOffset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  total?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  results?: Resolver<
-    Array<ResolversTypes["PodcastSearchResult"]>,
-    ParentType,
-    ContextType
-  >;
-};
+  id?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  listennotesUrl?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  rss?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  description?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  title?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  publisher?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  image?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  thumbnail?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  podcastItunesId?: Resolver<ResolversTypes["Int"], ParentType, ContextType>
+  latestPubDate?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  earliestPubDate?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  genreIds?: Resolver<Array<ResolversTypes["Int"]>, ParentType, ContextType>
+  totalEpisodes?: Resolver<ResolversTypes["Int"], ParentType, ContextType>
+}
 
 export type QueryResolvers<
   ContextType = any,
@@ -326,55 +277,65 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     QueryItunesEpisodeArgs
-  >;
-  searchEpisodes?: Resolver<
-    ResolversTypes["EpisodeSearchResults"],
+  >
+  search?: Resolver<
+    ResolversTypes["SearchResults"],
     ParentType,
     ContextType,
-    QuerySearchEpisodesArgs
-  >;
-  searchPodcasts?: Resolver<
-    ResolversTypes["PodcastSearchResults"],
-    ParentType,
-    ContextType,
-    QuerySearchPodcastsArgs
-  >;
+    QuerySearchArgs
+  >
   getPodcastById?: Resolver<
-    Maybe<ResolversTypes["PodcastSearchResult"]>,
+    Maybe<ResolversTypes["Podcast"]>,
     ParentType,
     ContextType,
     QueryGetPodcastByIdArgs
-  >;
-};
+  >
+  getEpisodesByIds?: Resolver<
+    Array<ResolversTypes["Episode"]>,
+    ParentType,
+    ContextType,
+    QueryGetEpisodesByIdsArgs
+  >
+  getPodcastsByIds?: Resolver<
+    Array<ResolversTypes["Podcast"]>,
+    ParentType,
+    ContextType,
+    QueryGetPodcastsByIdsArgs
+  >
+}
 
-export interface UploadScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes["Upload"], any> {
-  name: "Upload";
+export type SearchResultResolvers<
+  ContextType = any,
+  ParentType = ResolversParentTypes["SearchResult"]
+> = {
+  __resolveType: TypeResolveFn<"Episode" | "Podcast", ParentType, ContextType>
+}
+
+export type SearchResultsResolvers<
+  ContextType = any,
+  ParentType = ResolversParentTypes["SearchResults"]
+> = {
+  count?: Resolver<ResolversTypes["Int"], ParentType, ContextType>
+  nextOffset?: Resolver<ResolversTypes["Int"], ParentType, ContextType>
+  total?: Resolver<ResolversTypes["Int"], ParentType, ContextType>
+  results?: Resolver<
+    Array<ResolversTypes["SearchResult"]>,
+    ParentType,
+    ContextType
+  >
 }
 
 export type Resolvers<ContextType = any> = {
-  EpisodeSearchResult?: EpisodeSearchResultResolvers<ContextType>;
-  EpisodeSearchResults?: EpisodeSearchResultsResolvers<ContextType>;
-  ItunesEpisode?: ItunesEpisodeResolvers<ContextType>;
-  PodcastSearchResult?: PodcastSearchResultResolvers<ContextType>;
-  PodcastSearchResults?: PodcastSearchResultsResolvers<ContextType>;
-  Query?: QueryResolvers<ContextType>;
-  Upload?: GraphQLScalarType;
-};
+  Episode?: EpisodeResolvers<ContextType>
+  ItunesEpisode?: ItunesEpisodeResolvers<ContextType>
+  Podcast?: PodcastResolvers<ContextType>
+  Query?: QueryResolvers<ContextType>
+  SearchResult?: SearchResultResolvers
+  SearchResults?: SearchResultsResolvers<ContextType>
+}
 
 /**
  * @deprecated
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
  */
-export type IResolvers<ContextType = any> = Resolvers<ContextType>;
-export type DirectiveResolvers<ContextType = any> = {
-  cacheControl?: CacheControlDirectiveResolver<any, any, ContextType>;
-};
-
-/**
- * @deprecated
- * Use "DirectiveResolvers" root object instead. If you wish to get "IDirectiveResolvers", add "typesPrefix: I" to your config.
- */
-export type IDirectiveResolvers<ContextType = any> = DirectiveResolvers<
-  ContextType
->;
+export type IResolvers<ContextType = any> = Resolvers<ContextType>

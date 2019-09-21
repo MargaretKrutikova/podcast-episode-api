@@ -1,8 +1,8 @@
 import { gql } from "apollo-server-express"
 
 export const typeDefs = gql`
-  type EpisodeSearchResult {
-    listennotesId: String!
+  type Episode {
+    id: String!
     listennotesUrl: String!
     lengthSec: Int!
     rss: String!
@@ -13,13 +13,13 @@ export const typeDefs = gql`
     thumbnail: String!
     podcastItunesId: Int!
     pubDate: String!
-    podcastListennotesId: String!
+    podcastId: String!
     genreIds: [Int!]!
     podcastTitle: String!
     podcastListennotesUrl: String!
   }
-  type PodcastSearchResult {
-    listennotesId: String!
+  type Podcast {
+    id: String!
     listennotesUrl: String!
     rss: String!
     description: String!
@@ -33,39 +33,37 @@ export const typeDefs = gql`
     genreIds: [Int!]!
     totalEpisodes: Int!
   }
-  type EpisodeSearchResults {
+  union SearchResult = Episode | Podcast
+
+  type SearchResults {
     count: Int!
     nextOffset: Int!
     total: Int!
-    results: [EpisodeSearchResult!]!
+    results: [SearchResult!]!
   }
-  type PodcastSearchResults {
-    count: Int!
-    nextOffset: Int!
-    total: Int!
-    results: [PodcastSearchResult!]!
-  }
+
   type ItunesEpisode {
     id: String
     websiteUrl: String
   }
-  input BaseSearchInput {
+  enum SEARCH_TYPE {
+    EPISODE
+    PODCAST
+  }
+  input SearchInput {
+    searchType: SEARCH_TYPE!
     language: String
     genreIds: [Int!]
     searchTerm: String!
     offset: Int!
-  }
-  input EpisodeSearchInput {
     podcastId: String
     excludePodcastId: String
   }
   type Query {
     itunesEpisode(podcastId: String!, episodeName: String!): ItunesEpisode!
-    searchEpisodes(
-      input: BaseSearchInput!
-      episodeInput: EpisodeSearchInput
-    ): EpisodeSearchResults!
-    searchPodcasts(input: BaseSearchInput!): PodcastSearchResults!
-    getPodcastById(podcastId: String!): PodcastSearchResult
+    search(input: SearchInput!): SearchResults!
+    getPodcastById(podcastId: String!): Podcast
+    getEpisodesByIds(ids: [String!]!): [Episode!]!
+    getPodcastsByIds(ids: [String!]!): [Podcast!]!
   }
 `

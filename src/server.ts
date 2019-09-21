@@ -3,29 +3,46 @@ import { ApolloServer } from "apollo-server-express"
 import { typeDefs } from "./schema"
 import {
   Resolvers,
-  QuerySearchEpisodesArgs,
-  QuerySearchPodcastsArgs,
-  QueryGetPodcastByIdArgs
+  QuerySearchArgs,
+  QueryGetPodcastByIdArgs,
+  Episode,
+  Podcast,
+  QueryGetEpisodesByIdsArgs
 } from "./generated/graphql"
 import { getItunesEpisode, ItunesEpisodeQuery } from "./itunesApi"
 import {
-  getEpisodeSearchResults,
-  getPodcastSearchResults,
-  getPodcastById
+  getPodcastById,
+  getSearchResults,
+  getPodcastsByIds
 } from "./listenNotesApi"
 
 import "./env"
 
 const resolvers: Resolvers = {
+  SearchResult: {
+    __resolveType(obj) {
+      if ((obj as Episode).podcastId) {
+        return "Episode"
+      }
+
+      if ((obj as Podcast).totalEpisodes != undefined) {
+        return "Podcast"
+      }
+
+      return null
+    }
+  },
   Query: {
     itunesEpisode: (_: any, params: ItunesEpisodeQuery) =>
       getItunesEpisode(params),
-    searchEpisodes: (_: any, params: QuerySearchEpisodesArgs) =>
-      getEpisodeSearchResults(params.input, params.episodeInput),
-    searchPodcasts: (_: any, params: QuerySearchPodcastsArgs) =>
-      getPodcastSearchResults(params.input),
+    search: (_: any, params: QuerySearchArgs) => getSearchResults(params.input),
     getPodcastById: (_: any, params: QueryGetPodcastByIdArgs) =>
-      getPodcastById(params.podcastId)
+      getPodcastById(params.podcastId),
+    /** batch get */
+    getPodcastsByIds: (_: any, params: QueryGetEpisodesByIdsArgs) =>
+      getPodcastsByIds(params.ids),
+    getEpisodesByIds: (_: any, params: QueryGetEpisodesByIdsArgs) =>
+      getPodcastsByIds(params.ids) as any
   }
 }
 
