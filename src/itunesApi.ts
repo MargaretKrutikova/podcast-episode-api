@@ -26,6 +26,10 @@ const toItunesEpisode = ({ id, attributes }: EpisodeData): ItunesEpisode => ({
 const getEpisodeApiUrl = (podcastId: string) =>
   `${process.env.API_URL}/v1/catalog/us/podcasts/${podcastId}/episodes?offset=0&limit=300`
 
+const matchEpisodeName = (actualEpisodeName: string, searchText: string) =>
+  actualEpisodeName.toLowerCase() === searchText.toLocaleLowerCase() ||
+  actualEpisodeName.toLowerCase().indexOf(searchText.toLocaleLowerCase()) > -1
+
 export const getItunesEpisode = async ({
   episodeName,
   podcastId
@@ -37,8 +41,8 @@ export const getItunesEpisode = async ({
     }
   })
 
-  const episode = response.data.find(
-    ep => ep.attributes.name.toLowerCase() === episodeName.toLocaleLowerCase()
+  const episode = response.data.find(ep =>
+    matchEpisodeName(ep.attributes.name, episodeName)
   )
   const data: ItunesEpisode = episode
     ? toItunesEpisode(episode)
